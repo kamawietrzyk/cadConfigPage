@@ -1,0 +1,23 @@
+.select-container {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	align-items: flex-start;
+
+	select {
+		padding: 0.5rem;
+		width: 24vw;
+		border: 1px solid #dddddd;
+		border-radius: 5px;
+	}
+}
+
+.disabled {
+	label {
+		opacity: 0.4;
+	}
+
+	select {
+		cursor: not-allowed;
+	}
+}

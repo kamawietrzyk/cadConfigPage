@@ -1,0 +1,32 @@
+#root {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 2rem;
+	text-align: center;
+
+	p {
+		font-size: small;
+	}
+}
+
+.main-container {
+	width: 50vw;
+	height: 85vh;
+	border: 1px solid #f9f9f9;
+	border-radius: 5px;
+	background-color: rgba(242, 240, 240, 0.634);
+	padding: 1rem;
+}
+
+.viewer-container {
+	width: -webkit-fill-available;
+	height: 19rem;
+	background-color: white;
+	border-radius: 5px;
+	margin: 1rem 0;
+}
+
+.config-container {
+	display: flex;
+	justify-content: space-between;
+}

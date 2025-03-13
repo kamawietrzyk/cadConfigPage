@@ -1,0 +1,32 @@
+.button {
+	width: -webkit-fill-available;
+	background-color: lightgray;
+	color: rgb(44, 44, 44);
+	margin: 0.75rem 0;
+	border-radius: 8px;
+	border: 1px solid transparent;
+	padding: 0.6em 1.2em;
+	font-size: 1em;
+	font-weight: 500;
+	font-family: inherit;
+	cursor: pointer;
+	transition: background-color 0.25s;
+
+	&:hover {
+		color: rgb(14, 14, 14);
+		background-color: rgb(196, 196, 196);
+		border-color: rgb(180, 180, 180);
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		background-color: rgb(199, 199, 199);
+		color: rgb(116, 116, 116);
+		border-color: rgb(199, 199, 199);
+	}
+
+	&:focus,
+	&:focus-visible {
+		outline: 2px auto -webkit-focus-ring-color;
+	}
+}

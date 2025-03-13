@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cadenas Demo Page</title>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module" src="/src/main.jsx"></script>
+		<!-- <script type="module">
+
+        import * as CNS from "https://cdn-webcomponents.3dfindit.com/lib/12.9.1-1672/index.js"
+        
+        // Initialize the WebComponents.
+        CNS.Core.setApiKey("66c56a38010f4a81a82f6ed51c903399");
+        CNS.Core.setUserInfo({
+            server_type: "oem_apps_cadenas_webcomponentsdemo",
+            title: "Herr",
+            firstname: "Max",
+            lastname: "Mustermann",
+            userfirm: "CADENAS GmbH",
+            street: "Schernecker Straße 5",
+            zip: "86157",
+            city: "Augsburg",
+            country: "de",
+            phone: "+49 (0) 821 2 58 58 0-0",
+            fax: "+49 (0) 821 2 58 58 0-999",
+            email: "info@cadenas.de"
+        });
+        CNS.Core.setServiceBaseUrl("https://webapi.qa.partcommunity.com");
+        
+        // Run our code once the DOM is loaded.
+        document.addEventListener("DOMContentLoaded", function () {
+            // Update UI.
+            const paramToElement = [
+                { param: "catalog", element: "txt-catalog" },
+                { param: "orderNumber", element: "txt-ordernumber" }
+            ];
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            
+            paramToElement.forEach(({ param, element }) => {
+                if (urlSearchParams.has(param))
+                    document.getElementById(element).value = urlSearchParams.get(param);
+            });        
+
+            const tabToContainer = [
+                { tab: "tab-3d", container: "viewer3d-container" },
+                { tab: "tab-2d", container: "viewer2d-container" },
+                { tab: "tab-table", container: "table-container" }
+            ];
+            
+            tabToContainer.forEach(({ tab, container }) => {
+                document.getElementById(tab).addEventListener("click", () => {
+                    tabToContainer.forEach(({ tab: t, container: c }) => {
+                        document.getElementById(t).classList.toggle("active", t === tab);
+                        document.getElementById(c).classList.toggle("active", c === container);
+                    });
+                });
+            });
+
+            // Add click()-listener to "Search" button.
+            document.getElementById("btn-search").addEventListener("click", function () {
+                CNS.Services.Search.reverseLookup({
+                    catalog: document.getElementById("txt-catalog").value,
+                    part: document.getElementById("txt-ordernumber").value,
+                    exact: 0
+                }).then((reverseMapResult) => {
+                    // Show error message if no valid mapping is found.
+                    if ("error" in reverseMapResult) {
+                        alert(reverseMapResult.error);
+                        return;
+                    }
+                
+                    // Show 3D viewer.
+                    CNS.showWebViewer3d(
+                        {
+                            masterObject: { mident: reverseMapResult.mident || "" },
+                            syncContextID: "1",
+                            customMenuActions:
+                            {
+                                actDownload: {
+                                    defaultState: {
+                                        active: true,
+                                        toggle: false,
+                                        visible: true,
+                                    },
+                                    generator: {
+                                        title: "Download",
+                                        description: "Download the 3D model",
+                                        iconSrc: CNS.svg_download,
+                                        className: "downloadBtn",
+                                        callback: () => {
+                                            CNS.showDownloadDialog(
+                                                {
+                                                    transferObject: { mident: reverseMapResult.mident || "" },
+                                                    onDownload: (selectedFormats) => { 
+                                                    localStorage.setItem("selectedFormats", JSON.stringify(selectedFormats));
+                                                    },
+                                                    portal: "3dfindit",
+                                                    preselectedFormats: JSON.parse(localStorage.getItem("selectedFormats"))
+                                                },
+                                                "download-dialog"
+                                            );
+                                        },
+                                    },
+                                },
+                            },
+                            favoriteButtonBarActions: [ "actMeasureGrid",
+                                                        "actMeasure",
+                                                        "actCut",
+                                                        "actCustomDimensions",
+                                                        "actLabels",
+                                                        "actAnimate",
+                                                        "actPseudoFullscreen",
+                                                        "actHelpView",
+                                                        "actDownload",
+                                                    ],
+                        },
+                        "webviewer-3d"
+                    );
+                    
+                    // Show 2D viewer.
+                    CNS.showWebViewer2d(
+                        {
+                            transferObject: { mident: reverseMapResult.mident || "" },
+                            syncContextID: "1"
+                        },
+                        "webviewer-2d"
+                    );
+                    
+                    // Show table.
+                    CNS.showTableVertical(
+                        {
+                            transferObject: { mident: reverseMapResult.mident || "" },
+                            limitedUserAccess: () => { return false; },
+                            syncContextID: "1"
+                        },
+                        "table"
+                    );
+                    
+                    // Update UI.
+                    document.getElementById("tab-3d").removeAttribute("disabled");
+                    document.getElementById("tab-3d").classList.add("active");
+                    document.getElementById("tab-2d").removeAttribute("disabled");
+                    document.getElementById("tab-table").removeAttribute("disabled");
+                    document.getElementById("btn-order").removeAttribute("disabled");
+                    
+                    // Add click()-listener to "Order" button.
+                    document.getElementById("btn-order").addEventListener("click", function () {
+                    CNS.showDownloadDialog(
+                            {
+                                transferObject: { mident: reverseMapResult.mident || "" },
+                                onDownload: (selectedFormats) => { 
+                                    localStorage.setItem("selectedFormats", JSON.stringify(selectedFormats));
+                                },
+                                portal: "3dfindit",
+                                preselectedFormats: JSON.parse(localStorage.getItem("selectedFormats"))
+                            },
+                            "download-dialog"
+                        );
+                    });
+                });
+            });
+        });
+    
+        </script> -->
+	</body>
+</html>
