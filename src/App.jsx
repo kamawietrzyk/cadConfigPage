@@ -4,7 +4,7 @@ import { Input } from './components/Input/Input'
 import { Button } from './components/Button/Button'
 import { Select } from './components/Select/Select'
 import { ThreeDViewer } from './components/ThreeDViewer'
-import { API_KEY } from './utils/config'
+import { API_KEY, serviceBaseUrl, tableBaseUrl } from './utils/config'
 
 function App() {
 	const [CNS, setCNS] = useState(undefined)
@@ -14,11 +14,15 @@ function App() {
 	})
 
 	const [mident, setMident] = useState(undefined)
-	const [tableData, setTableData] = useState(undefined)
+	const [tableData, setTableData] = useState({
+		path: '',
+		varsettransfer: '',
+		values: ''
+	})
 
 	const [configFields, setConfigFields] = useState({
-		configOne: '',
-		configTwo: ''
+		TNR: '',
+		TYP: ''
 	})
 
 	useEffect(() => {
@@ -64,12 +68,47 @@ function App() {
 		const option = e.target.name
 		const value = e.target.value
 		setConfigFields({ ...configFields, [option]: value })
-		//add functionality to re-render the 3D viewer and update configuration options
+		updateConfigurationTable(option, value)
+	}
+
+	const fetchTableData = async () => {
+		try {
+			const fetchTableUrl = `${tableBaseUrl}?language=english&eol=1&plm=true&includeunclassifiedbycountry=false&enablePreviewPerLine=true&mident=${mident}&includecrossref=true&apikey=${API_KEY}`
+
+			const response = await fetch(fetchTableUrl)
+			const data = await response.json()
+			setTableData({
+				...tableData,
+				path: data.index.path,
+				varsettransfer: data.index.varsettransfer,
+				values: data.index.line.values
+			})
+		} catch (error) {
+			console.error('Error fetching table data: ', error)
+		}
+	}
+
+	const updateConfigurationTable = async (key, value) => {
+		try {
+			const url = `${tableBaseUrl}?language=english&eol=1&plm=true&includeunclassifiedbycountry=false&enablePreviewPerLine=true&path=${
+				tableData.path
+			}&varsettransfer=${
+				tableData.varsettransfer
+			}&changevar=${key}&changeval=${encodeURIComponent(
+				value
+			)}&includecrossref=true&apikey=${API_KEY}`
+
+			const response = await fetch(url)
+			const data = await response.json()
+			setMident(data.index.mident)
+		} catch (error) {
+			console.error('Error updating configuration table:', error)
+		}
 	}
 
 	const handleSearch = async () => {
 		try {
-			const url = `https://webapi.qa.partcommunity.com/service/reversemap?language=english&catalog=${inputFields.catalog}&part=${inputFields.orderNo}&exact=0&multiple=0&apikey=${API_KEY}`
+			const url = `${serviceBaseUrl}/reversemap?language=english&catalog=${inputFields.catalog}&part=${inputFields.orderNo}&exact=0&multiple=0&apikey=${API_KEY}`
 
 			const response = await fetch(url)
 			const data = await response.json()
@@ -84,31 +123,14 @@ function App() {
 		}
 	}
 
-	const fetchTableData = async () => {
-		try {
-			const baseUrl = 'https://webapi.qa.partcommunity.com/service/table'
-			const fetchTableUrl = `${baseUrl}?language=english&eol=1&plm=true&includeunclassifiedbycountry=false&enablePreviewPerLine=true&mident=${mident}&includecrossref=true&apikey=${API_KEY}`
-
-			const response = await fetch(fetchTableUrl)
-			const data = await response.json()
-			setTableData(data)
-		} catch (error) {
-			console.error('Error fetching table data: ', error)
-		}
-	}
-
 	useEffect(() => {
-		if (mident || configFields) {
+		if (mident) {
 			fetchTableData()
 		}
-	}, [mident, configFields])
+	}, [mident])
 
 	const isSearchDisabled =
 		inputFields.catalog === '' || inputFields.orderNo === ''
-
-	if (tableData) {
-		console.log(tableData.index)
-	}
 
 	return (
 		<div className='main-container'>
@@ -139,19 +161,19 @@ function App() {
 			<div className='config-container'>
 				<Select
 					selectLabel={
-						tableData ? tableData.index.line.values.TNR.desc : 'Config One'
+						tableData.values ? tableData.values.TNR.desc : 'Config 1'
 					}
-					options={tableData ? tableData.index.line.values.TNR.values : []}
-					selectName='configOne'
+					options={tableData.values ? tableData.values.TNR.values : []}
+					selectName='TNR'
 					handleSelect={handleSelect}
 					isDisabled={!mident}
 				/>
 				<Select
 					selectLabel={
-						tableData ? tableData.index.line.values.TYP.desc : 'Config One'
+						tableData.values ? tableData.values.TYP.desc : 'Config 2'
 					}
-					options={tableData ? tableData.index.line.values.TYP.values : []}
-					selectName='configTwo'
+					options={tableData.values ? tableData.values.TYP.values : []}
+					selectName='TYP'
 					handleSelect={handleSelect}
 					isDisabled={!mident}
 				/>
