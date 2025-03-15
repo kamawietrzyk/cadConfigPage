@@ -3,21 +3,56 @@ import './App.css'
 import { Input } from './components/Input/Input'
 import { Button } from './components/Button/Button'
 import { Select } from './components/Select/Select'
+import { ThreeDViewer } from './components/ThreeDViewer'
 import { API_KEY } from './utils/config'
 
 function App() {
+	const [CNS, setCNS] = useState(undefined)
 	const [inputFields, setInputFields] = useState({
 		catalog: '',
 		orderNo: ''
 	})
 
-	const [searchResult, setSearchResult] = useState(undefined)
+	const [mident, setMident] = useState(undefined)
 	const [tableData, setTableData] = useState(undefined)
 
 	const [configFields, setConfigFields] = useState({
 		configOne: '',
 		configTwo: ''
 	})
+
+	useEffect(() => {
+		const loadCadenasLib = async () => {
+			try {
+				const CNSModule = await import(
+					'https://cdn-webcomponents.3dfindit.com/lib/12.9.1-1672/index.js'
+				)
+
+				CNSModule.Core.setApiKey(API_KEY)
+				CNSModule.Core.setUserInfo({
+					server_type: 'oem_apps_cadenas_webcomponentsdemo',
+					title: 'Herr',
+					firstname: 'Max',
+					lastname: 'Mustermann',
+					userfirm: 'CADENAS GmbH',
+					street: 'Schernecker Straße 5',
+					zip: '86157',
+					city: 'Augsburg',
+					country: 'de',
+					phone: '+49 (0) 821 2 58 58 0-0',
+					fax: '+49 (0) 821 2 58 58 0-999',
+					email: 'info@cadenas.de'
+				})
+				CNSModule.Core.setServiceBaseUrl('https://webapi.qa.partcommunity.com')
+
+				setCNS(CNSModule)
+			} catch (error) {
+				console.error('Error loading Cadenas library:', error)
+			}
+		}
+
+		loadCadenasLib()
+	}, [])
 
 	const handleInputChange = (e) => {
 		const name = e.target.name
@@ -42,7 +77,7 @@ function App() {
 			if (data.error) {
 				alert('Sorry, no match found! Please try again.')
 			} else {
-				setSearchResult(data.mident)
+				setMident(data.mident)
 			}
 		} catch (error) {
 			console.error('Error fetching data: ', error)
@@ -52,7 +87,7 @@ function App() {
 	const fetchTableData = async () => {
 		try {
 			const baseUrl = 'https://webapi.qa.partcommunity.com/service/table'
-			const fetchTableUrl = `${baseUrl}?language=english&eol=1&plm=true&includeunclassifiedbycountry=false&enablePreviewPerLine=true&mident=${searchResult}&includecrossref=true&apikey=${API_KEY}`
+			const fetchTableUrl = `${baseUrl}?language=english&eol=1&plm=true&includeunclassifiedbycountry=false&enablePreviewPerLine=true&mident=${mident}&includecrossref=true&apikey=${API_KEY}`
 
 			const response = await fetch(fetchTableUrl)
 			const data = await response.json()
@@ -63,10 +98,10 @@ function App() {
 	}
 
 	useEffect(() => {
-		if (searchResult || configFields) {
+		if (mident || configFields) {
 			fetchTableData()
 		}
-	}, [searchResult, configFields])
+	}, [mident, configFields])
 
 	const isSearchDisabled =
 		inputFields.catalog === '' || inputFields.orderNo === ''
@@ -96,11 +131,11 @@ function App() {
 				text='Search'
 				isDisabled={isSearchDisabled}
 			/>
-			<div className='viewer-container'>
-				{searchResult && (
-					<p>The 3D viewer will render here for this mident: {searchResult}</p>
-				)}
-			</div>
+			{mident ? (
+				<ThreeDViewer CNS={CNS} mident={mident} />
+			) : (
+				<div className='viewer-container'></div>
+			)}
 			<div className='config-container'>
 				<Select
 					selectLabel={
@@ -109,7 +144,7 @@ function App() {
 					options={tableData ? tableData.index.line.values.TNR.values : []}
 					selectName='configOne'
 					handleSelect={handleSelect}
-					isDisabled={!searchResult}
+					isDisabled={!mident}
 				/>
 				<Select
 					selectLabel={
@@ -118,7 +153,7 @@ function App() {
 					options={tableData ? tableData.index.line.values.TYP.values : []}
 					selectName='configTwo'
 					handleSelect={handleSelect}
-					isDisabled={!searchResult}
+					isDisabled={!mident}
 				/>
 			</div>
 		</div>
