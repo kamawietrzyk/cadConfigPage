@@ -59,16 +59,14 @@ function App() {
 	}, [])
 
 	const handleInputChange = (e) => {
-		const name = e.target.name
-		const value = e.target.value
+		const { name, value } = e.target
 		setInputFields({ ...inputFields, [name]: value })
 	}
 
 	const handleSelect = (e) => {
-		const option = e.target.name
-		const value = e.target.value
-		setConfigFields({ ...configFields, [option]: value })
-		updateConfigurationTable(option, value)
+		const { name, value } = e.target
+		setConfigFields({ ...configFields, [name]: value })
+		updateConfigurationTable(name, value)
 	}
 
 	const fetchTableData = async () => {
@@ -78,7 +76,6 @@ function App() {
 			const response = await fetch(fetchTableUrl)
 			const data = await response.json()
 			setTableData({
-				...tableData,
 				path: data.index.path,
 				varsettransfer: data.index.varsettransfer,
 				values: data.index.line.values
@@ -129,9 +126,6 @@ function App() {
 		}
 	}, [mident])
 
-	const isSearchDisabled =
-		inputFields.catalog === '' || inputFields.orderNo === ''
-
 	return (
 		<div className='main-container'>
 			<Input
@@ -151,7 +145,7 @@ function App() {
 			<Button
 				handleClick={handleSearch}
 				text='Search'
-				isDisabled={isSearchDisabled}
+				isDisabled={inputFields.catalog === '' || inputFields.orderNo === ''}
 			/>
 			{mident ? (
 				<ThreeDViewer CNS={CNS} mident={mident} />
