@@ -1,6 +1,6 @@
 .button {
 	width: -webkit-fill-available;
-	background-color: lightgray;
+	background-color: rgb(163, 163, 163);
 	color: rgb(44, 44, 44);
 	margin: 0.75rem 0;
 	border-radius: 8px;
@@ -14,8 +14,8 @@
 
 	&:hover {
 		color: rgb(14, 14, 14);
-		background-color: rgb(196, 196, 196);
-		border-color: rgb(180, 180, 180);
+		background-color: rgb(143, 143, 143);
+		border-color: rgb(125, 125, 125);
 	}
 
 	&:disabled {
