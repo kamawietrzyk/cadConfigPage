@@ -1,12 +1,17 @@
-# React + Vite
+# CADENAS Configuration Page
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the CADENAS Configuration Page! This application provides a user-friendly interface for configuring and viewing 3D models using the CADENAS WebComponents library.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **3D Viewer Integration**: Seamlessly integrates the CADENAS 3D viewer to visualize 3D models directly within the application.
+- **Dynamic Configuration**: Allows users to dynamically configure parts and view the updated 3D model in real-time.
+- **Search Functionality**: Users can search for parts using catalog and order numbers, making it easy to find specific components.
+- **Responsive Design**: Ensures a great user experience on both desktop and mobile devices, adapting to different screen sizes.
+- **Configuration Table**: Displays a configuration table that updates based on user selections, providing detailed information about the selected part.
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **React**: A JavaScript library for building user interfaces.
+- **Vite**: A fast build tool and development server.
+- **CADENAS WebComponents**: A library for integrating CADENAS functionalities.
