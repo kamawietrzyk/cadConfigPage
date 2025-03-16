@@ -4,7 +4,7 @@ import { Input } from './components/Input/Input'
 import { Button } from './components/Button/Button'
 import { Select } from './components/Select/Select'
 import { ThreeDViewer } from './components/ThreeDViewer'
-import { API_KEY, serviceBaseUrl, tableBaseUrl } from './utils/config'
+import { API_KEY, SERVICE_BASE_URL, TABLE_BASE_URL } from './utils/config'
 
 function App() {
 	const [CNS, setCNS] = useState(undefined)
@@ -77,7 +77,7 @@ function App() {
 
 	const fetchTableData = async () => {
 		try {
-			const tableUrl = `${tableBaseUrl}&mident=${mident}&apikey=${API_KEY}`
+			const tableUrl = `${TABLE_BASE_URL}&mident=${mident}&apikey=${API_KEY}`
 			const response = await fetch(tableUrl)
 			const data = await response.json()
 
@@ -93,7 +93,7 @@ function App() {
 
 	const updateTableDataConfig = async (key, value) => {
 		try {
-			const updateTableUrl = `${tableBaseUrl}&path=${
+			const updateTableUrl = `${TABLE_BASE_URL}&path=${
 				tableData.path
 			}&varsettransfer=${
 				tableData.varsettransfer
@@ -111,7 +111,7 @@ function App() {
 
 	const handleSearch = async () => {
 		try {
-			const searchUrl = `${serviceBaseUrl}&catalog=${inputFields.catalog}&part=${inputFields.orderNo}&apikey=${API_KEY}`
+			const searchUrl = `${SERVICE_BASE_URL}&catalog=${inputFields.catalog}&part=${inputFields.orderNo}&apikey=${API_KEY}`
 			const response = await fetch(searchUrl)
 			const data = await response.json()
 
