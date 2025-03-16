@@ -15,3 +15,7 @@ Welcome to the CADENAS Configuration Page! This application provides a user-frie
 - **React**: A JavaScript library for building user interfaces.
 - **Vite**: A fast build tool and development server.
 - **CADENAS WebComponents**: A library for integrating CADENAS functionalities.
+
+## Deployment
+
+The project is deployed via Netlify and can be [viewed here](https://cadenas-demo.netlify.app/).
