@@ -58,6 +58,12 @@ function App() {
 		loadCadenasLib()
 	}, [])
 
+	useEffect(() => {
+		if (mident) {
+			fetchTableData()
+		}
+	}, [mident])
+
 	const handleInputChange = (e) => {
 		const { name, value } = e.target
 		setInputFields({ ...inputFields, [name]: value })
@@ -66,15 +72,15 @@ function App() {
 	const handleSelect = (e) => {
 		const { name, value } = e.target
 		setConfigFields({ ...configFields, [name]: value })
-		updateConfigurationTable(name, value)
+		updateTableDataConfig(name, value)
 	}
 
 	const fetchTableData = async () => {
 		try {
-			const fetchTableUrl = `${tableBaseUrl}?language=english&eol=1&plm=true&includeunclassifiedbycountry=false&enablePreviewPerLine=true&mident=${mident}&includecrossref=true&apikey=${API_KEY}`
-
-			const response = await fetch(fetchTableUrl)
+			const tableUrl = `${tableBaseUrl}&mident=${mident}&apikey=${API_KEY}`
+			const response = await fetch(tableUrl)
 			const data = await response.json()
+
 			setTableData({
 				path: data.index.path,
 				varsettransfer: data.index.varsettransfer,
@@ -85,18 +91,18 @@ function App() {
 		}
 	}
 
-	const updateConfigurationTable = async (key, value) => {
+	const updateTableDataConfig = async (key, value) => {
 		try {
-			const url = `${tableBaseUrl}?language=english&eol=1&plm=true&includeunclassifiedbycountry=false&enablePreviewPerLine=true&path=${
+			const updateTableUrl = `${tableBaseUrl}&path=${
 				tableData.path
 			}&varsettransfer=${
 				tableData.varsettransfer
 			}&changevar=${key}&changeval=${encodeURIComponent(
 				value
-			)}&includecrossref=true&apikey=${API_KEY}`
-
-			const response = await fetch(url)
+			)}&apikey=${API_KEY}`
+			const response = await fetch(updateTableUrl)
 			const data = await response.json()
+
 			setMident(data.index.mident)
 		} catch (error) {
 			console.error('Error updating configuration table:', error)
@@ -105,9 +111,8 @@ function App() {
 
 	const handleSearch = async () => {
 		try {
-			const url = `${serviceBaseUrl}/reversemap?language=english&catalog=${inputFields.catalog}&part=${inputFields.orderNo}&exact=0&multiple=0&apikey=${API_KEY}`
-
-			const response = await fetch(url)
+			const searchUrl = `${serviceBaseUrl}&catalog=${inputFields.catalog}&part=${inputFields.orderNo}&apikey=${API_KEY}`
+			const response = await fetch(searchUrl)
 			const data = await response.json()
 
 			if (data.error) {
@@ -119,12 +124,6 @@ function App() {
 			console.error('Error fetching data: ', error)
 		}
 	}
-
-	useEffect(() => {
-		if (mident) {
-			fetchTableData()
-		}
-	}, [mident])
 
 	return (
 		<div className='main-container'>
