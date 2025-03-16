@@ -26,3 +26,9 @@
 	display: flex;
 	justify-content: space-between;
 }
+
+@media screen and (max-width: 1024px) {
+	.main-container {
+		width: 85vw;
+	}
+}

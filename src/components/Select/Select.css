@@ -21,3 +21,11 @@
 		cursor: not-allowed;
 	}
 }
+
+@media screen and (max-width: 1024px) {
+	.select-container {
+		select {
+			width: 40vw;
+		}
+	}
+}
